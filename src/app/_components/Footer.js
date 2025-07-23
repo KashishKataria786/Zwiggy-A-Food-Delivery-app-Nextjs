@@ -34,11 +34,11 @@ const Footer = () => {
     {/* Social + App */}
     <div>
       <h4 className="font-medium text-gray-800 mb-2">Connect</h4>
-      <div className="flex space-x-4 mb-4">
+      {/* <div className="flex space-x-4 mb-4">
         <a href="#"><img src="/icons/facebook.svg" alt="Facebook" className="h-5 w-5" /></a>
         <a href="#"><img src="/icons/instagram.svg" alt="Instagram" className="h-5 w-5" /></a>
         <a href="#"><img src="/icons/twitter.svg" alt="Twitter" className="h-5 w-5" /></a>
-      </div>
+      </div> */}
       <p className="text-xs text-gray-400">© 2025 Offverse. All rights reserved.</p>
     </div>
   </div>
