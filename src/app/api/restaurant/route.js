@@ -11,15 +11,26 @@ export async function GET(){
 }
 
 export async function POST(request) {
-  try {await mongoose.connect(connectionStr);
-    
+  await mongoose.connect(connectionStr,{useNewUrlParser:true});
+  try {
     const payload = await request.json();
-
-    
+    let result;
+    let success=false;
+    if(payload.login){
+      result = await restaurantSchema.findOne({email:payload.email, password:payload.password})
+      if(result){
+        success=true
+      }
+      }else{
+       
     const restaurant = new restaurantSchema(payload);
     const result = await restaurant.save();
-
-    return NextResponse.json({ result, success: true });
+    if(result){
+        success=true
+      }
+    }
+   
+    return NextResponse.json({ result, success });
   } catch (error) {
     return NextResponse.json({
       success: false,

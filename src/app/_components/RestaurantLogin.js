@@ -1,10 +1,38 @@
+"use client"
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 const RestaurantLogin = () => {
+  const [email,setEmail] = useState('');
+  const [password,setPassword] = useState('');
+  const [error,setError]= useState(false);
+  const router= useRouter();
+  const handleLogin= async()=>{
+    if(!email ||!password){
+      setError(true);
+      return;
+    }else{
+      setError(false);
+    }
+    let response = await fetch("http://localhost:3000/api/restaurant", {method:'POST', body:JSON.stringify({email,password,login:true})});
+
+    response=await response.json();
+    if(response.success){
+      const {result} = response;
+      delete result.password
+      localStorage.setItem('RestaurantUser',JSON.stringify(result));
+      router.push('/restaurant/dashboard')
+    }else{
+      alert("Login NOY")
+    }
+
+
+  }
   return (
    <div className="w-full max-w-sm">
     <h1 className="text-3xl font-bold text-gray-900 mb-6">Login</h1>
 
-    <form className="space-y-4 text-left">
+    <form className="space-y-4 text-left" onSubmit={handleLogin}>
       <div>
         <label htmlFor="email" className="block text-sm text-gray-700 mb-1">
           Email address
@@ -12,9 +40,14 @@ const RestaurantLogin = () => {
         <input
           type="email"
           id="email"
+          value={email}
+          onChange={(e)=>setEmail(e.target.value)}
           placeholder="you@example.com"
           className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
+        {error&&!email&&<span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>}
       </div>
 
       <div>
@@ -25,8 +58,13 @@ const RestaurantLogin = () => {
           type="password"
           id="password"
           placeholder="••••••••"
+           value={password}
+          onChange={(e)=>setPassword(e.target.value)}
           className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:outline-none focus:ring-2 focus:ring-orange-500"
         />
+         {error&&!password&&<span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>}
       </div>
 
       <button

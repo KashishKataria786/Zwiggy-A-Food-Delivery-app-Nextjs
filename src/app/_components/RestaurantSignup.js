@@ -11,10 +11,31 @@ const RestaurantSignup = () => {
   const [address, setAddress] = useState("");
   const [c_password, setC_password] = useState("");
   const [contact, setContact] = useState("");
+  const [error, setError] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
 
   const router = useRouter();
 
   const handleSignup = async () => {
+    if (password !== c_password) {
+      setPasswordError(true);
+      return;
+    } else {
+      setPasswordError(false);
+    }
+    if (
+      !email ||
+      !password ||
+      !restaurantName ||
+      !city ||
+      !address ||
+      !contact
+    ) {
+      setError(true);
+      return;
+    } else {
+      setError(false);
+    }
     console.log(email);
     let response = await fetch("http://localhost:3000/api/restaurant", {
       method: "POST",
@@ -29,10 +50,10 @@ const RestaurantSignup = () => {
     });
     response = await response.json();
     console.log(response);
-    if(response.success){
-      toast.success("Restaurant Registered Successfully!")
+    if (response.success) {
+      toast.success("Restaurant Registered Successfully!");
       console.log(response);
-      const {result}= response;
+      const { result } = response;
       delete result.password;
       localStorage.setItem("RestaurantUser", JSON.stringify(result));
       router.push("/restaurant/dashboard");
@@ -58,6 +79,11 @@ const RestaurantSignup = () => {
             placeholder="you@example.com"
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
+          {error && !email && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
 
         <div>
@@ -74,7 +100,17 @@ const RestaurantSignup = () => {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
-          />
+          />{" "}
+          {passwordError && (
+            <span className="text-red-500 text-sm font-light">
+              Password & Confirm Password Does not Match
+            </span>
+          )}
+          {error && !password && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
 
         <div>
@@ -92,6 +128,16 @@ const RestaurantSignup = () => {
             onChange={(e) => setC_password(e.target.value)}
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
+          {passwordError && (
+            <span className="text-red-500 text-sm font-light">
+              Password & Confirm Password Does not Match
+            </span>
+          )}
+          {error && !c_password && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
 
         <div>
@@ -109,6 +155,11 @@ const RestaurantSignup = () => {
             placeholder="e.g., Bombay Bistro"
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
+          {error && !restaurantName && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
 
         <div>
@@ -123,6 +174,11 @@ const RestaurantSignup = () => {
             placeholder="e.g., Mumbai"
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
+          {error && !city && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
 
         <div>
@@ -137,6 +193,11 @@ const RestaurantSignup = () => {
             placeholder="Street, Area, Zip Code"
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
+          {error && !address && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
 
         <div>
@@ -151,6 +212,11 @@ const RestaurantSignup = () => {
             placeholder="e.g., 9876543210"
             className="w-full px-4 py-3 border border-gray-300 rounded-md bg-gray-50 text-sm focus:ring-2 focus:ring-orange-500 focus:outline-none"
           />
+          {error && !contact && (
+            <span className="text-[12px] font-light text-red-500">
+              "Missong fields"
+            </span>
+          )}
         </div>
       </form>
 
