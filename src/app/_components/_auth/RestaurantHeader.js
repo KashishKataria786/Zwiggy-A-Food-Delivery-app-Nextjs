@@ -24,7 +24,7 @@ const RestaurantHeader = () => {
   }
 
   return (
-    <header className="w-full bg-white shadow-sm border-b border-gray-200">
+    <header className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 relative ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
         <div className="text-xl font-semibold text-orange-500">Zwiggy</div>

@@ -16,15 +16,14 @@ export async function POST(request) {
     const payload = await request.json();
     let result;
     let success=false;
-    if(payload.login){
-      result = await restaurantSchema.findOne({email:payload.email, password:payload.password})
+    if(payload?.login){
+      result = await restaurantSchema.findOne({email:payload.email, password:payload.password});
       if(result){
         success=true
       }
       }else{
-       
     const restaurant = new restaurantSchema(payload);
-    const result = await restaurant.save();
+    result = await restaurant.save();
     if(result){
         success=true
       }
