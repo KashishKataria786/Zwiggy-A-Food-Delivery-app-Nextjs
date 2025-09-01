@@ -30,14 +30,32 @@ export async function GET(request, content) {
   } 
 }
 
-// export async function GET(request,content){
-//     const id = content.params.id
-//     let success=false;
-//     await mongoose.connect(connectionStr,{useNewUrlParser:true});
-//     const result = await FoodSchema.find({resto_id:id});
-//     if(result){
-//         success=true
-//     }
-//     return NextResponse.json({result,success})
+export async function DELETE(request,content){
+  const id = content.params.id;
+  let success=false
+  await mongoose.connect(connectionStr, { useNewUrlParser: true, useUnifiedTopology: true });
+  if (!id) {
+    return NextResponse.json(
+      { success: false, message: 'Missing restaurant ID' },
+      { status: 400 }
+    );
+  }
 
-// }
+  try {
+    const result=await FoodSchema.deleteOne({_id:id});
+    if(!result){
+      return NextResponse.json({success, message:"Item not found", },{status:404})
+    }
+    if(result.deletedCount > 0){
+      success=true
+    }
+    return NextResponse.json({result,success});
+  } catch (error) {
+    console.error('Error Deleting food items:', error);
+    return NextResponse.json(
+      { success: false, message: 'Server error', error: error.message },
+      { status: 500 }
+    );
+  }
+
+}

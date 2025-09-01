@@ -3,11 +3,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-const RestaurantLogin = () => {
+const CustomerLogin = () => {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [error,setError]= useState(false);
   const router= useRouter();
+
+
   const handleLogin= async()=>{
     if(!email ||!password){
       setError(true);
@@ -15,7 +17,7 @@ const RestaurantLogin = () => {
     }else{
       setError(false);
     }
-    let response = await fetch("http://localhost:3000/api/restaurant", {method:'POST', body:JSON.stringify({email,password,login:true})});
+    let response = await fetch("http://localhost:3000/api/users-auth/login", {method:'POST', body:JSON.stringify({email,password,login:true})});
 
     response=await response.json();
     console.log(response)
@@ -24,8 +26,8 @@ const RestaurantLogin = () => {
       const {result} = response;
       console.log(result)
       delete result.password
-      localStorage.setItem('RestaurantUser',JSON.stringify(result));
-      router.push('/restaurant/dashboard')
+      localStorage.setItem('User',JSON.stringify(result));
+      router.push('/')
     }else{
       toast.error("Login unsuccessful! Try Again")
     }
@@ -34,7 +36,7 @@ const RestaurantLogin = () => {
   }
   return (
    <div className="w-full max-w-sm">
-    <h1 className="text-3xl font-bold text-gray-900 mb-6">Login</h1>
+    <h1 className="text-3xl font-bold text-gray-900 mb-6">Customer Login</h1>
 
     <form className="space-y-4 text-left" onSubmit={handleLogin}>
       <div>
@@ -87,4 +89,4 @@ const RestaurantLogin = () => {
   )
 }
 
-export default RestaurantLogin
+export default CustomerLogin

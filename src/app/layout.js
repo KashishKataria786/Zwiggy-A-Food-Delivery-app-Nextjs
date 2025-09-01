@@ -1,16 +1,7 @@
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ToastProvider from "./ToastProvider";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import ReduxProvider from "./reduxProvider";
+import No_Internet from "./_components/_ui/No_Internet";
 
 export const metadata = {
   title: "Zwiggy",
@@ -19,13 +10,14 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <ToastProvider><html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
-    </html></ToastProvider>
-    
+    <ReduxProvider>
+      <ToastProvider>
+        <No_Internet/>
+        <html lang="en">
+          
+          <body>{children}</body>
+        </html>
+      </ToastProvider>
+    </ReduxProvider>
   );
 }
