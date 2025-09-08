@@ -1,5 +1,5 @@
 
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, current } from "@reduxjs/toolkit"
 
 const initialState ={
     items:[],
@@ -22,9 +22,10 @@ const cartSlice= createSlice({
             }else{
                 state.items.push({...item,qty:1});
             }
-
             state.totalQuantity+=1;
             state.totalPrice+=item.price;
+            let userdata = JSON.stringify(current(state.items));
+            localStorage.setItem('CartData',userdata)
         },
 
         removeFromCart:(state,action)=>{
@@ -56,6 +57,8 @@ const cartSlice= createSlice({
             state.items=[],
             state.totalPrice=0,
             state.totalQuantity=0
+             let userdata = JSON.stringify(current(state.items));
+            localStorage.setItem('CartData',userdata)
         },
     }
 

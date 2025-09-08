@@ -1,20 +1,44 @@
-import { connectionStr } from "@/app/lib/db";
+import connectDatabase, { connectionStr } from "@/app/lib/db";
 import { restaurantSchema } from "@/app/lib/restaurantModel";
-import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
-export async function GET(request, content) {
-  let queryParams = request.nextUrl.searchParams;
-  console.log(queryParams.get("location"));
-  await mongoose.connect(connectionStr, { useNewUrlParser: true });
-  let filter = {};
-  if (queryParams.get("location")) {
-    let city = queryParams.get("location");
-    filter = { city: { $regex: new RegExp(city, "i") } };
-  } else if (queryParams.get("restaurant")) {
-    let restaurantName = queryParams.get("restaurant");
-    filter = { restaurantName: { $regex: new RegExp(restaurantName, "i") } };
+
+
+// API for Getting Restaurant Details and Also Backend Filtering As well
+export async function GET(request) {
+  try {
+    await connectDatabase();
+
+    const queryParams = request.nextUrl.searchParams;
+    let filter = {};
+
+    if (queryParams.get("location")) {
+      const city = queryParams.get("location");
+      filter = { city: { $regex: new RegExp(city, "i") } };
+    } else if (queryParams.get("restaurant")) {
+      const restaurantName = queryParams.get("restaurant");
+      filter = { restaurantName: { $regex: new RegExp(restaurantName, "i") } };
+    } 
+
+    const result = await restaurantSchema.find(filter);
+
+    if (!result || result.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "No restaurants found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(
+      { success: true, result },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.error("Error fetching restaurants:", error);
+    return NextResponse.json(
+      { success: false, message: "Something went wrong" },
+      { status: 500 }
+    );
   }
-  let result = await restaurantSchema.find(filter);
-  return NextResponse.json({ result, success: true });
 }

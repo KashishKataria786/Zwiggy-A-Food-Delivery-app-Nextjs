@@ -4,39 +4,29 @@ import { ShoppingCart, User } from "lucide-react";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
+import { useAuth } from "@/app/context/AuthContext";
 
 export default function CustomerHeader() {
 
-  const [localStorgeData,setLocalStorageData] = useState("");
-  useEffect(()=>{
-    setLocalStorageData(JSON.parse(localStorage.getItem('User')))
-  },[])
-  const userStorage = localStorgeData
-  const [user,setUser] = useState(localStorage?userStorage:undefined);
+  
 
-  const {items}=useSelector((state)=>state.cart);
+  const {user, logout} = useAuth();
+  const {items}=useSelector((state)=>state.cart)
+
   const router= useRouter();
  
-  console.log("USer Storage", userStorage);
-
-  const logout=()=>{
-    localStorage.removeItem('User');
-    toast?.success("Logout successfull");
-    router?.push('/auth');
-  }
-
 
   return (
     <header className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-6 md:px-12 py-3 flex items-center justify-between">
+      <div className="max-w-7xl mx-auto px-6 md:px-12 py-1 flex items-center justify-between">
         
         {/* Logo */}
         <div className="flex items-center gap-2">
           <img
-              className="h-[55px] rounded-full w-auto"
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9xIUhlo7cJ4TZqp7GJSWO6dav22n2O7n2_A&s"
+              className="h-[75px] rounded-full w-auto"
+              src="/logo.webp"
             />
-          <span className="text-xl font-bold text-gray-800">Zwiggy</span>
+          <span className="text-xl font-bold text-gray-800">Swiggy</span>
         </div>
 
         {/* Navigation */}
@@ -49,7 +39,7 @@ export default function CustomerHeader() {
 
         {/* Right Section */}
         <div className="flex items-center gap-6">
-          {userStorage&&user?
+          {user?
           <>
           <h1>{user?.name}</h1>
           <button onClick={logout} className="flex items-center gap-2 bg-orange-500 px-2 py-1  rounded-sm text-white hover:bg-orange-600 transition">

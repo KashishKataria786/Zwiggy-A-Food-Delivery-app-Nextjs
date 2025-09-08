@@ -1,17 +1,34 @@
-import { connectionStr } from "@/app/lib/db";
+import connectDatabase, { connectionStr } from "@/app/lib/db";
 import { restaurantSchema } from "@/app/lib/restaurantModel";
-import mongoose, { set } from "mongoose";
 import { NextResponse } from "next/server";
 
-export async function GET(){
-    await mongoose.connect(connectionStr,{useNewUrlParser:true});
-    let success=false;
-    let result = await restaurantSchema.find();
-    if(result){
-        success=true;
+
+// API for Getting The Locations for the Location Input Field on Homepage
+export async function GET() {
+  try {
+    await connectDatabase();
+
+    let result = await restaurantSchema.find({}, "city"); 
+
+    if (!result || result.length === 0) {
+      return NextResponse.json(
+        { success: false, message: "No cities found" },
+        { status: 404 }
+      );
     }
-    result = result.map((item)=>item.city)
-    result = [...new Set(result.map((item)=>item))]
-    return NextResponse.json({result,success})
-    
+
+    const uniqueCities = [...new Set(result.map((item) => item.city))];
+
+    return NextResponse.json(
+      { success: true, result: uniqueCities },
+      { status: 200 }
+    );
+
+  } catch (error) {
+    console.error("Error fetching cities:", error);
+    return NextResponse.json(
+      { success: false, message: "Something went wrong" },
+      { status: 500 }
+    );
+  }
 }

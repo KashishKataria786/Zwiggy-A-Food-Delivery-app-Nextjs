@@ -5,7 +5,10 @@ const foodsModel= new mongoose.Schema({
     price:Number,
     image_path:String,
     description:String,
-    restaurant_id:mongoose.Schema.Types.ObjectId
+    veg:{type:Boolean,default:true},
+    restaurant_id:{type: mongoose.Schema.Types.ObjectId, ref: "restaurants", required: true },
+    rating:{type:Number , default:0},
+    
 })
 
 export const FoodSchema =mongoose.models.foods || mongoose.model('foods', foodsModel)

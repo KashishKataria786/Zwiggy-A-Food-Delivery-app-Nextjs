@@ -1,11 +1,11 @@
 "use client"
+
 import React, { useEffect, useState } from 'react'
 
 const No_Internet = () => {
   const [isOnline,setIsOnline]= useState(true);
   useEffect(()=>{
     setIsOnline(navigator.onLine);
-    console.log("Internt", navigator.onLine);
 
     const handleOnline =()=>setIsOnline(true);
     const handleOffline = ()=>setIsOnline(false);

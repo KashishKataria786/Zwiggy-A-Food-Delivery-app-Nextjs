@@ -16,55 +16,58 @@ const CustomerRegister = () => {
 
   const router = useRouter();
 
-  const handleSignup = async () => {
+ const handleSignup = async () => {
+  try {
     if (password !== c_password) {
       setPasswordError(true);
+      toast.error("Passwords do not match");
       return;
     } else {
       setPasswordError(false);
     }
-    if (
-      !email ||
-      !password ||
-      !name ||
-      !city ||
-      !address ||
-      !contact
-    ) {
+
+    if (!email || !password || !name || !city || !address || !contact) {
       setError(true);
+      toast.error("All fields are required");
       return;
     } else {
       setError(false);
     }
-    console.log(email);
+
     let response = await fetch("http://localhost:3000/api/users-auth", {
       method: "POST",
-      body: JSON.stringify({
-        email,
-        password,
-        name,
-        city,
-        address,
-        contact,
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password, name, city, address, contact }),
     });
+
     response = await response.json();
     console.log(response);
-    if (response.success) {
-      toast.success("User Registered Successfully!");
-      console.log(response);
-      const { result } = response;
-      delete result.password;
-      localStorage.setItem("User", JSON.stringify(result));
-      router.push("/");
+
+    if (!response.success) {
+      toast.error(response?.message || "Registration failed");
+      return;
     }
-  };
+
+    toast.success("User Registered Successfully!");
+
+    const { result, token } = response;
+    localStorage.setItem("User", JSON.stringify(result));
+    localStorage.setItem("Token", token);
+
+    router.push("/");
+  } catch (error) {
+    console.error(error);
+    toast.error("Something went wrong!");
+  }
+};
+
 
   return (
     <div className="w-full max-w-4xl bg-white px-5">
       <h1 className="text-3xl font-bold text-gray-900 mb-6 text-center">
         Customer Sign Up
       </h1>
+      
 
       <form className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
         <div>

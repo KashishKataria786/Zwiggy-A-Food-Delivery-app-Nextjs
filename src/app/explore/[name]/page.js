@@ -1,9 +1,10 @@
 "use client"
 import CustomerLayout from '@/app/_components/_layout/CustomerLayout'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import FoodImagesection from '@/app/_components/_ui/_customer_ui/FoodImagesection'
 import MenuCard from '@/app/_components/_ui/_customer_ui/MenuCard'
+import { AuthContext, useAuth } from '@/app/context/AuthContext'
 
 const RestaurantDetailPage = (props) => {
   const [restaurantDetails, setRestaurantDetails] = useState({})
@@ -11,10 +12,12 @@ const RestaurantDetailPage = (props) => {
   const [foodImages, setFoodImages] = useState([])
   const [photosOpen,setPhotosOpen]=useState(false);
   const [loading,setLoading] = useState(true);
+
+  const {user,loggedIn} = useContext(AuthContext);
   
   const searchParams = useSearchParams()
   const id = searchParams.get("id")   
-  const name = props.params.name
+  const name = searchParams.get("name");
   
 
   const loadRestaurantDetails = async () => {
@@ -45,39 +48,85 @@ const RestaurantDetailPage = (props) => {
 
   return (
     <CustomerLayout>
-      <div className="w-[60vw] mx-auto px-1 py-9">
-        <h1 className="text-4xl font-semibold">{decodeURI(name)}</h1>
+  <div className="w-[65vw] mx-auto px-2 py-10">
+    {/* Restaurant Header */}
+    <div className="border-b pb-6">
+      <h1 className="text-4xl font-bold text-gray-900">
+        {restaurantDetails?.restaurantName}
+      </h1>
 
-        {restaurantDetails?.restaurantName && (
-          <div className="mt-4">
-            <p className=" text-gray-700 text-sm">{`${restaurantDetails.address}`}</p>
-            <p className=" text-gray-600 text-sm">{restaurantDetails.city}</p>
-            
-          </div>
-        )}
-       
-        <div className='space-x-10 my-5'>
-            <button className={`py-4 px-6 border-b-4 text-xl font-semibold border-b-gray-200 ${!photosOpen ? "border-b-orange-400":"text-gray-600"}`} onClick={()=>setPhotosOpen(false)}>Menu </button>
-            <button className={`py-4 px-6 border-b-4 text-xl font-semibold border-b-gray-200 ${photosOpen ? "border-b-orange-400":"text-gray-600"}`}   onClick={()=> setPhotosOpen(true)}>Food Images</button>
-            <hr className=' border-gray-300 rounded-full'/>
+      {!loading && restaurantDetails?.restaurantName && (
+        <div className="mt-2 text-gray-600 text-base">
+          <p>{restaurantDetails.address}</p>
+          <p className="mt-1">{restaurantDetails.city}</p>
         </div>
-        {
-            photosOpen? <FoodImagesection data={foodImages}/>:
-            <div>
-                <div>
-                    Menu
-                    </div>
-            {/* <h1>{`${menu.length}  items in Menu`}</h1>   */}
-             <div>
-             {loading? <>
-             {[1,2,3,4,5].map((item)=><div className='h-[200px] w-full my-2 bg-gray-200 animate-pulse'>
-                </div>)}
-             </>:menu.length>0&&menu.map((item,index)=><MenuCard key={index} data={item}  />)}
-            </div>
-            </div>
-        }
-      </div>
-    </CustomerLayout>
+      )}
+    </div>
+
+    {/* Tabs */}
+    <div className="flex space-x-8 mt-6 border-b border-gray-200">
+      <button
+        onClick={() => setPhotosOpen(false)}
+        className={`pb-3 text-lg font-semibold transition-colors ${
+          !photosOpen
+            ? "border-b-2 border-orange-500 text-orange-600"
+            : "text-gray-500 hover:text-gray-700"
+        }`}
+      >
+        Menu
+      </button>
+      <button
+        onClick={() => setPhotosOpen(true)}
+        className={`pb-3 text-lg font-semibold transition-colors ${
+          photosOpen
+            ? "border-b-2 border-orange-500 text-orange-600"
+            : "text-gray-500 hover:text-gray-700"
+        }`}
+      >
+        Food Images
+      </button>
+    </div>
+
+    {/* Content */}
+    <div className="mt-6">
+      {photosOpen ? (
+        <FoodImagesection data={foodImages} />
+      ) : (
+        <div>
+          {!loading && (
+            <h2 className="text-xl font-semibold mb-4 text-gray-800">
+              {menu.length} items in Menu
+            </h2>
+          )}
+
+          {/* Menu List */}
+          <div className="space-y-5">
+            {loading ? (
+              [1, 2, 3, 4, 5].map((index) => (
+                <div
+                  key={index}
+                  className="h-[180px] w-full rounded-lg bg-gray-200 animate-pulse"
+                ></div>
+              ))
+            ) : menu.length > 0 ? (
+              menu.map((item, index) => (
+                <div
+                  key={index}
+                  className="bg-white  "
+                >
+                  <MenuCard data={item} />
+                </div>
+              ))
+            ) : (
+              <p className="text-gray-500">No items available</p>
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  </div>
+</CustomerLayout>
+
   )
 }
 

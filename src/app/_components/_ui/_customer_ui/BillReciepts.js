@@ -1,17 +1,70 @@
 "use client";
+import { useAuth } from "@/app/context/AuthContext";
+import { useRouter } from "next/navigation";
+import { NextResponse } from "next/server";
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
 
 const BillReceipt = () => {
-  const cartItems = useSelector((state) => state.cart.items);
+  const cartItems =JSON.parse(localStorage.getItem('CartData')) || [];
+  const {user,loggedIn}= useAuth();
+  const dispatch = useDispatch();
+  const router= useRouter();
+
   // Subtotal Calculation
   const subTotal = cartItems.reduce(
     (sum, item) => sum + item.price * item.qty,
     0
   );
   const deliveryFee = subTotal > 300 ? 0 : 30;
-  const tax = +(subTotal * 0.05).toFixed(2); // 5% tax
+  const tax = +(subTotal * 0.05).toFixed(2); 
   const grandTotal = subTotal + deliveryFee + tax;
+
+
+   const placeOrder = async () => {
+  try {
+    let user_Id = user?.sub;
+    let restaurant_Id = cartItems[0]?.restaurant_id;
+    let foodItems = cartItems.map((item) => {return({ id:item._id,qty:item.qty})});
+    let deliveryAgent_id = "68b41750e31741dc8c8e6149"; 
+
+    let collection = {
+      user_Id:user?.sub,
+      // cart: cartItems, 
+      restaurant_Id,
+      foodItems:foodItems,
+      deliveryAgent_id:deliveryAgent_id,
+      status: "confirmed",
+      amountToPay: grandTotal,
+    };
+
+    let response = await fetch("http://localhost:3000/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" }, 
+      body: JSON.stringify(collection),
+    });
+
+    response = await response.json();
+    console.log("respone",response)
+    if (!response.success) {
+      toast.error("Order not placed");
+      return;
+    }
+
+    console.log("Order placed:", collection);
+    toast.success(response.message);
+    // dispatch(clearCart);
+    localStorage.removeItem('CartData');
+    router.push('/my-profile');
+  } catch (error) {
+    console.log("Order error:", error);
+    toast.error("Something went Wrong");
+  }
+};
+
+
+  
 
   return (
     <div className="px-4 py-4 space-y-4 bg-white border-gray-100 shadow-md">
@@ -32,9 +85,9 @@ const BillReceipt = () => {
 
       {/* Cart Item Menu */}
       <div className="space-y-3">
-        {cartItems.map((item) => (
+        {cartItems.map((item,index) => (
           <div
-            key={item.id}
+            key={index}
             className="flex justify-between items-center text-sm"
           >
             <div className="flex items-center gap-2 ">
@@ -78,7 +131,7 @@ const BillReceipt = () => {
       </div>
 
       {/* Place Order Button */}
-      <button className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 font-semibold">
+      <button onClick={placeOrder} className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 font-semibold">
         Place Order
       </button>
     </div>

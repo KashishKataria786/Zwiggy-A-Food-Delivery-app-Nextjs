@@ -3,11 +3,11 @@ import React from 'react'
 const FoodImagesection = ({data=[] }) => {
   
   return (
-    <div className='grid grid-cols-5 gap-2 rounded-sm '>
+    <div className='md:grid md:grid-cols-5 gap-2 rounded-sm '>
         
         {data.length > 0 ? <>
         {
-            data?.map((item)=><div >
+            data?.map((item,index)=><div key={index}>
             <img className='w-[200px] h-[200px] object-cover' src={item}/>
         </div>)
         }

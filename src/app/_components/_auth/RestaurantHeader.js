@@ -27,8 +27,13 @@ const RestaurantHeader = () => {
     <header className="w-full bg-white shadow-sm border-b border-gray-200 sticky top-0 relative ">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-xl font-semibold text-orange-500">Zwiggy</div>
-
+        <div className="flex items-center gap-2">
+          <img
+              className="h-[75px] rounded-full w-auto"
+              src="/logo.webp"
+            />
+          <span className="text-xl font-bold text-gray-800">Swiggy</span>
+        </div>
         {/* Navigation Links */}
         <nav>
           <ul className="flex items-center space-x-6 text-sm text-gray-700 font-medium">

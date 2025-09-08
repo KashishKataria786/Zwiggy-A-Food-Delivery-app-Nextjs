@@ -10,32 +10,48 @@ const CustomerLogin = () => {
   const router= useRouter();
 
 
-  const handleLogin= async()=>{
-    if(!email ||!password){
+
+ const handleLogin = async () => {
+  try {
+    if (!email || !password) {
+      toast.error("Missing Fields");
       setError(true);
-      return false;
-    }else{
+      return;
+    } else {
       setError(false);
     }
-    let response = await fetch("http://localhost:3000/api/users-auth/login", {method:'POST', body:JSON.stringify({email,password,login:true})});
 
-    response=await response.json();
-    console.log(response)
-    if(response.success){
-      toast.success("Login successful")
-      const {result} = response;
-      console.log(result)
-      delete result.password
-      localStorage.setItem('User',JSON.stringify(result));
-      router.push('/')
-    }else{
-      toast.error("Login unsuccessful! Try Again")
+    let response = await fetch("http://localhost:3000/api/users-auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    response = await response.json();
+    console.log(response);
+
+    if (!response.success) {
+      toast.error(response.message || "Login failed");
+      return;
     }
 
+    toast.success(response.message);
 
+    const { result, token } = response;
+
+    localStorage.setItem("User", JSON.stringify(result));
+    localStorage.setItem("Token", token);
+
+    router.push("/explore/cart");
+  } catch (error) {
+    console.error("Login error:", error);
+    toast.error("Something went wrong");
+    return;
   }
+};
+
   return (
-   <div className="w-full max-w-sm">
+   <div className="w-full max-w-sm bg-white ">
     <h1 className="text-3xl font-bold text-gray-900 mb-6">Customer Login</h1>
 
     <form className="space-y-4 text-left" onSubmit={handleLogin}>

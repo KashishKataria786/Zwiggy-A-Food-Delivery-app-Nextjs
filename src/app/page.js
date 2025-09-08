@@ -5,6 +5,7 @@ import { MapPin, Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import LoadingSpinner from "./_components/_ui/LoadingSpinner";
+import ProtectedRoute from "./_wrappers/ProtectedRoute";
 
 export default function Home() {
   const [allLocations, setAllLocations] = useState([]);
@@ -76,6 +77,7 @@ export default function Home() {
   }, [])
   return (
     <>
+
       <ToastContainer position="top-right" autoClose={1000} />
       <CustomerLayout>
         <div className="relative h-auto py-10 flex items-center justify-center text-center ">
@@ -134,24 +136,12 @@ export default function Home() {
                   onChange={(event) => LoadRestaurantListAPI({ restaurant: event.target.value })}
                 />
               </div>
-
-              {/* Food Input */}
-              <div className="flex items-center w-full md:w-1/3 border border-gray-300 rounded-md bg-white px-2 py-4 text-sm">
-                <Search className="text-gray-500 mr-2" size={18} />
-                <input
-                  type="text"
-                  placeholder="Search Food"
-                  className="w-full outline-none text-gray-700 text-sm"
-                />
-              </div>
             </div>
           </div>
 
         </div>
         <div className="bg-gray-100">
-          {loading? <><div className="h-[40vh]">
-            <LoadingSpinner size={20}/>
-            </div></>:
+          {loading&&<LoadingSpinner size={50}/>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto p-16">
             {allRestaurants?.map((item, index) => (
               <div onClick={()=>router.push(`/explore/${item?.restaurantName}`+"?id="+item._id  )}  key={index} className="max-w-xs w-full bg-white border border-white shadow-md overflow-hidden hover:shadow-lg transition duration-300">
@@ -197,11 +187,10 @@ export default function Home() {
               </div>
 
             ))}
-          </div>}
+          </div>
 
         </div>
       </CustomerLayout>
-
     </>
   );
 }
