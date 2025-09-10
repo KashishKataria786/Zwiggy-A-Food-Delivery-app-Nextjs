@@ -16,7 +16,7 @@ export async function POST(request) {
     if (!email || !password) {
       return NextResponse.json(
         { success: false, message: 'Missing email or password.' },
-        { status: 400 }
+        { status: 400 } 
       );
     }
 
