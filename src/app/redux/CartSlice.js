@@ -36,6 +36,8 @@ const cartSlice= createSlice({
         state.totalPrice -= item.price * item.quantity;
         state.items = state.items.filter(i => i.id !== id);
             }
+            let userdata = JSON.stringify(current(state.items));
+            localStorage.setItem('CartData',userdata)
         },
         increaseQuantity:(state,action)=>{
             const item = state.items.find(i => i.id === action.payload);

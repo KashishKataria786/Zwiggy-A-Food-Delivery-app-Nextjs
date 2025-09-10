@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 export async function GET(request, content) {
   await connectDatabase();
   try {
-    const { id } = content.params;
+    const { id } =await content.params;
     console.log("Restaurant ID:", id);
 
     // Parse query params properly

@@ -3,6 +3,7 @@ import CustomerLayout from '@/app/_components/_layout/CustomerLayout'
 import BillReceipt from '@/app/_components/_ui/_customer_ui/BillReciepts'
 import CartCard from '@/app/_components/_ui/_customer_ui/CartCard'
 import EmptyCart from '@/app/_components/_ui/_customer_ui/EmptyCart'
+import MenuCard from '@/app/_components/_ui/_customer_ui/MenuCard'
 import UserDataInCart from '@/app/_components/_ui/_customer_ui/UserDataInCart'
 import ProtectedRoute from '@/app/_wrappers/ProtectedRoute'
 import { useAuth } from '@/app/context/AuthContext'
@@ -39,9 +40,11 @@ const CartPage = () => {
                   Empty Cart
                 </button>
               </div>
-              {items?.map((item, index) => (
-                <CartCard key={index} data={item} />
+              <div className='space-y-3'>
+                {items?.map((item, index) => (
+                <MenuCard key={index} data={item} />
               ))}
+                </div>
             </div>
             <div>
                <h2 className="text-lg font-semibold text-gray-800 mb-4 pb-1">🚚 Delivery Information</h2>

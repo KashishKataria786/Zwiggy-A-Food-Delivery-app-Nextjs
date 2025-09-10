@@ -1,5 +1,6 @@
 import { connectionStr } from "@/app/lib/db";
 import { restaurantSchema } from "@/app/lib/restaurantModel";
+import { userModel } from "@/app/lib/userModel";
 import mongoose from "mongoose";
 import { NextResponse } from "next/server";
 
@@ -33,3 +34,4 @@ export async function POST(request) {
     }, { status: 500 });
   }
 }
+

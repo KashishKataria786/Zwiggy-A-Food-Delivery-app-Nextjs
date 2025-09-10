@@ -140,51 +140,68 @@ export default function Home() {
           </div>
 
         </div>
-        <div className="bg-gray-100">
+        <div className="bg-gray-10">
           {loading&&<LoadingSpinner size={50}/>}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mx-auto p-16">
             {allRestaurants?.map((item, index) => (
-              <div onClick={()=>router.push(`/explore/${item?.restaurantName}`+"?id="+item._id  )}  key={index} className="max-w-xs w-full bg-white border border-white shadow-md overflow-hidden hover:shadow-lg transition duration-300">
-                {/* Image */}
-                <div className="relative">
-                  <img
-                    src={item?.image || "/restaurant-placeholder.jpg"}
-                    alt={item?.restaurantName}
-                    className="w-full h-40 object-cover"
-                  />
-                  {/* Main discount badge */}
-                  <span className="absolute bottom-2 left-2 bg-orange-500 text-white text-xs px-2 py-1 rounded-md">
-                    {item?.offer || "30% OFF"}
-                  </span>
-                </div>
+              <div
+  onClick={() =>
+    router.push(`/explore/${item?.restaurantName}` + "?id=" + item._id)
+  }
+  key={index}
+  className="max-w-xs w-full bg-white border border-gray-100 rounded-2xl shadow-sm overflow-hidden cursor-pointer hover:shadow-xl hover:scale-[1.02] transition-all duration-300"
+>
+  {/* Image Section */}
+  <div className="relative">
+    <img
+      src={item?.image || "/restaurant-placeholder.jpg"}
+      alt={item?.restaurantName}
+      className="w-full h-44 object-cover rounded-t-2xl"
+    />
+    {/* Gradient Overlay */}
+    <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent rounded-t-2xl"></div>
+    {/* Offer Badge */}
+    <span className="absolute bottom-3 left-3 bg-orange-500 text-white text-xs px-2.5 py-1 rounded-md font-semibold shadow">
+      {item?.offer || "30% OFF"}
+    </span>
+  </div>
 
-                {/* Content */}
-                <div className="p-4">
-                  {/* Restaurant Name */}
-                  <h2 className="text-lg font-bold text-gray-800 truncate">
-                    {item?.restaurantName}
-                  </h2>
+  {/* Content */}
+  <div className="p-4 space-y-2">
+    {/* Restaurant Name */}
+    <h2 className="text-lg font-bold text-gray-900 truncate">
+      {item?.restaurantName}
+    </h2>
 
-                  {/* City */}
-                  <p className="text-sm text-gray-600 truncate">📍 {item?.city}</p>
+    {/* City */}
+    <p className="text-sm text-gray-600 flex items-center gap-1">
+      📍 <span className="truncate">{item?.city}</span>
+    </p>
 
-                  {/* Ratings + Delivery Time */}
-                  <div className="flex items-center justify-between mt-2 text-sm text-gray-700">
-                    <span className="flex items-center gap-1">⭐ {item?.rating || "4.2"}</span>
-                    <span>{item?.deliveryTime || "30-40 mins"}</span>
-                  </div>
+    {/* Ratings + Delivery */}
+    <div className="flex items-center justify-between mt-2">
+      <span className="flex items-center gap-1 text-sm bg-green-100 text-green-700 px-2 py-0.5 rounded-md font-medium">
+        ⭐ {item?.rating || "4.2"}
+      </span>
+      <span className="text-sm bg-gray-100 text-gray-700 px-2 py-0.5 rounded-md font-medium">
+        {item?.deliveryTime || "30-40 mins"}
+      </span>
+    </div>
 
-                  {/* Address */}
-                  <p className="text-sm text-gray-500 mt-1 truncate">{item?.address}</p>
+    {/* Address */}
+    <p className="text-xs text-gray-500 mt-1 line-clamp-2">
+      {item?.address}
+    </p>
 
-                  {/* 🔥 Extra discount section */}
-                  {item?.extraDiscount && (
-                    <div className="mt-3 bg-orange-100 border border-orange-200 rounded-lg px-3 py-2 text-sm text-orange-700 font-medium">
-                      {item?.extraDiscount}
-                    </div>
-                  )}
-                </div>
-              </div>
+    {/* 🔥 Extra Discount */}
+    {item?.extraDiscount && (
+      <div className="mt-3 bg-orange-50 border border-orange-200 rounded-lg px-3 py-2 text-sm text-orange-700 font-medium">
+        {item?.extraDiscount}
+      </div>
+    )}
+  </div>
+</div>
+
 
             ))}
           </div>

@@ -1,29 +1,27 @@
   import React, { useEffect, useState } from 'react'
-  import LoadingSpinner from './_ui/LoadingSpinner';
+  import LoadingSpinner from '../LoadingSpinner';
   import { toast } from 'react-toastify';
 
-  const ParticularOrderComp = ({ data = {} , onOrderUpdated , onClose}) => {
+  const CustomerOrderDetails  = ({ data = {} , onOrderUpdated , onClose}) => {
     const [loading, setLoading] = useState(true);
     const [foods, setFoods] = useState([]);
-    const [customer, setCustomer] = useState(null);
+    const [restaurant, setRestaurant] = useState(null);
     const [status,setStatus]= useState(data?.status)
 
 
     const loadParticularOrderDetails = async () => {
       console.log("Data",status)
       try {
-        if (!data?._id) return; // prevent running without order data
-
+        if (!data?._id) return; 
         const orderID = data._id;
         const customerID = data.user_Id;
         const restaurant_Id = data.restaurant_Id;
 
-        // ✅ Fetch customer details
-        const customerRes = await fetch(`http://localhost:3000/api/customer/details/${customerID}`);
-        const customerJson = await customerRes.json();
-        setCustomer(customerJson?.result || null);
+        const RestaurantRes = await fetch(`http://localhost:3000/api/restaurant/${restaurant_Id}`);
+        const RestaurantJson = await RestaurantRes.json();
+        setRestaurant(RestaurantJson?.result || null);
 
-        // ✅ Fetch all food item details in parallel
+
         const foodRequests = data.foodItems.map((x) =>
           fetch(`http://localhost:3000/api/restaurant/foods/${restaurant_Id}/${x.id}`)
         );
@@ -71,13 +69,8 @@
         toast.error(result.message || "Error updating status");
         return;
       }
-
       toast.success(result.message || "Status changed successfully");
-
-      // ✅ Refresh parent order list
       onOrderUpdated();
-
-      // ✅ Close modal after update
       onClose();
     } catch (error) {
       console.error("Status update error:", error);
@@ -92,26 +85,7 @@
 
     return (
       <>
-      <div className="flex items-center gap-2 py-3">
-          <select
-            value={status}
-            onChange={(e) => setStatus(e.target.value)}
-            className="block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-300"
-          >
-            <option value="confirmed">Confirmed</option>
-            <option value="preparing">Preparing</option>
-            <option value="on-the-way">On the way</option>
-            <option value="delivered">Delivered</option>
-            <option value="cancelled">Cancelled</option>
-          </select>
-
-          <button
-            onClick={handleStatusChange}
-            className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-          >
-            Update
-          </button>
-        </div>
+      
       <div className="p-6 bg-white border border-gray-200 rounded-sm space-y-4">
       {/* Header */}
       <div className="flex justify-between items-center border-b pb-3">
@@ -156,27 +130,27 @@
         </span>
       </div>
 
-      {/* Customer */}
+      {/* Restueant */}
       <div className="p-5 bg-white rounded-sm shadow-sm border border-gray-300">
         <h1 className="text-lg font-semibold text-gray-800 mb-4">
-          Customer Details
+          Restaurant Details
         </h1>
         <div className="space-y-2 text-sm text-gray-600">
           <p>
             <span className="font-medium text-gray-700">Name:</span>{" "}
-            {customer?.name}
+            {restaurant?.restaurantName}
           </p>
           <p>
             <span className="font-medium text-gray-700">Address:</span>{" "}
-            {customer?.address}
+            {restaurant?.address}
           </p>
           <p>
             <span className="font-medium text-gray-700">Contact:</span>{" "}
-            {customer?.contact}
+            {restaurant?.contact}
           </p>
           <p>
             <span className="font-medium text-gray-700">City:</span>{" "}
-            {customer?.city}
+            {restaurant ?.city}
           </p>
         </div>
       </div>
@@ -185,4 +159,4 @@
   };
 
 
-  export default ParticularOrderComp
+  export default CustomerOrderDetails

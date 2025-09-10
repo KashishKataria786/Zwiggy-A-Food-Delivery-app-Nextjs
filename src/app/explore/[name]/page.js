@@ -50,7 +50,7 @@ const RestaurantDetailPage = (props) => {
     <CustomerLayout>
   <div className="w-[65vw] mx-auto px-2 py-10">
     {/* Restaurant Header */}
-    <div className="border-b pb-6">
+    <div className=" pb-6">
       <h1 className="text-4xl font-bold text-gray-900">
         {restaurantDetails?.restaurantName}
       </h1>
@@ -100,19 +100,19 @@ const RestaurantDetailPage = (props) => {
           )}
 
           {/* Menu List */}
-          <div className="space-y-5">
+          <div className="space-y-5 grid grid-cols-2 gap-3">
             {loading ? (
               [1, 2, 3, 4, 5].map((index) => (
                 <div
                   key={index}
-                  className="h-[180px] w-full rounded-lg bg-gray-200 animate-pulse"
+                  className="h-[180px]  rounded-lg bg-gray-200 animate-pulse"
                 ></div>
               ))
             ) : menu.length > 0 ? (
               menu.map((item, index) => (
                 <div
                   key={index}
-                  className="bg-white  "
+                  className="bg-white flex "
                 >
                   <MenuCard data={item} />
                 </div>

@@ -33,38 +33,38 @@ const SidebarLink = ({ icon, label, expand, path }) => {
 };
 
 // Auth / User Section
-const HeaderAuth = ({ onLogout }) =>{
-  const user = JSON.parse(localStorage.getItem("RestaurantUser"));
-  return(
-  <div className="space-y-2">
-    <div className="flex gap-3 items-center justify-between">
-      <div className="flex gap-2 bg-white px-2 pr-4 rounded-full p-1">
-        <img
-          className="h-[45px] w-[45px] rounded-full object-cover"
-          src="https://avatar.iran.liara.run/public"
-          alt="User Avatar"
-        />
-        <div>
-          <h1 className="text-md font-medium">{user?.restaurantName}</h1>
-          <p className="text-[12px] font-light">{user?.email}</p>
-        </div>
-      </div>
-    </div>
-    <SidebarLink
-    icon={<PersonStandingIcon/>}
-    label="Profile"
-    />
+// const HeaderAuth = ({ onLogout }) =>{
+//   const user = JSON.parse(localStorage.getItem("RestaurantUser"));
+//   return(
+//   <div className="space-y-2">
+//     <div className="flex gap-3 items-center justify-between">
+//       <div className="flex gap-2 bg-white px-2 pr-4 rounded-full p-1">
+//         <img
+//           className="h-[45px] w-[45px] rounded-full object-cover"
+//           src="https://avatar.iran.liara.run/public"
+//           alt="User Avatar"
+//         />
+//         <div>
+//           <h1 className="text-md font-medium">{user?.restaurantName}</h1>
+//           <p className="text-[12px] font-light">{user?.email}</p>
+//         </div>
+//       </div>
+//     </div>
+//     <SidebarLink
+//     icon={<PersonStandingIcon/>}
+//     label="Profile"
+//     />
 
-    <button
-      onClick={onLogout}
-      className="flex items-center gap-2 w-full p-3 bg-red-500 hover:bg-red-600 text-white rounded-full transition"
-    >
-      <IoLogOutSharp />
-      <span>Logout</span>
-    </button>
-  </div>
-);
-}
+//     <button
+//       onClick={onLogout}
+//       className="flex items-center gap-2 w-full p-3 bg-red-500 hover:bg-red-600 text-white rounded-full transition"
+//     >
+//       <IoLogOutSharp />
+//       <span>Logout</span>
+//     </button>
+//   </div>
+// );
+// }
 // Sidebar Component
 const Sidebar = () => {
   const [expand, setExpand] = useState(true);
@@ -120,7 +120,7 @@ const Sidebar = () => {
 
       {/* User Section */}
       <div className="mt-10">
-        <HeaderAuth onLogout={handleLogout} />
+        {/* <HeaderAuth onLogout={handleLogout} /> */}
       </div>
     </aside>
   );

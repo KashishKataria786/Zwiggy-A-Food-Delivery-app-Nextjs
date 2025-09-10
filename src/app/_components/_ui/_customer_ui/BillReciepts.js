@@ -28,7 +28,7 @@ const BillReceipt = () => {
     let restaurant_Id = cartItems[0]?.restaurant_id;
     let foodItems = cartItems.map((item) => {return({ id:item._id,qty:item.qty})});
     let deliveryAgent_id = "68b41750e31741dc8c8e6149"; 
-
+    
     let collection = {
       user_Id:user?.sub,
       // cart: cartItems, 
@@ -63,78 +63,87 @@ const BillReceipt = () => {
   }
 };
 
-
   
 
   return (
-    <div className="px-4 py-4 space-y-4 bg-white border-gray-100 shadow-md">
-      {/* Restaurant Detail Section */}
-      <div className="flex items-center justify-start gap-3 h-[50px] border-b pb-3">
-        <div>
-          <img
-            className="h-[50px] w-[50px] rounded-md"
-            src="/restaurant-placeholder.jpg"
-            alt="restaurant"
-          />
-        </div>
-        <div className="flex flex-col justify-between">
-          <h1 className="text-sm font-bold">Kulcha Theka</h1>
-          <h2 className="text-[12px] font-medium text-gray-600">Mohali</h2>
-        </div>
-      </div>
-
-      {/* Cart Item Menu */}
-      <div className="space-y-3">
-        {cartItems.map((item,index) => (
-          <div
-            key={index}
-            className="flex justify-between items-center text-sm"
-          >
-            <div className="flex items-center gap-2 ">
-              <img src='/veg-icon.png' className="h-[15px] w-[15px]"/>
-              <span className="text-green-600 font-bold ">{item.qty}×</span>
-              <p>{item.name}</p>
-            </div>
-            <p className="font-md">₹{item.price * item.qty}</p>
-          </div>
-        ))}
-      </div>
-
-      {/* Suggestion Box */}
-      <div>
-        <textarea
-          className="w-full rounded-md p-2 text-sm bg-gray-100"
-          placeholder="Any suggestions? (e.g. Less spicy, no onion)"
-        />
-      </div>
-
-      {/* Bill Details */}
-      <div className="border-t pt-3 space-y-2 text-sm">
-        <h1>Bill Details</h1>
-        <div className="flex justify-between">
-          <p>Subtotal</p>
-          <p>₹{subTotal}</p>
-        </div>
-        <div className="flex justify-between">
-          <p>Delivery Fee</p>
-          <p>{deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}</p>
-        </div>
-        <div className="flex justify-between">
-          <p>Tax (5%)</p>
-          <p>₹{tax}</p>
-        </div>
-        <hr />
-        <div className="flex justify-between font-bold text-lg">
-          <p>Total</p>
-          <p>₹{grandTotal}</p>
-        </div>
-      </div>
-
-      {/* Place Order Button */}
-      <button onClick={placeOrder} className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 font-semibold">
-        Place Order
-      </button>
+   <div className="px-5 py-5 bg-white border border-gray-100 rounded-sm shadow-md space-y-5 relative">
+  {/* Restaurant Detail Section */}
+  <div className="flex items-center gap-3 border-b pb-3">
+    <img
+      className="h-12 w-12 rounded-lg object-cover"
+      src="/restaurant-placeholder.jpg"
+      alt="restaurant"
+    />
+    <div className="flex flex-col">
+      <h1 className="text-base font-bold text-gray-900">Kulcha Theka</h1>
+      <h2 className="text-sm font-medium text-gray-500">Mohali</h2>
     </div>
+  </div>
+
+  {/* Cart Item Menu */}
+  <div className="space-y-3">
+    {cartItems.map((item, index) => (
+      <div
+        key={index}
+        className="flex justify-between items-center text-sm"
+      >
+        <div className="flex items-center gap-2">
+          <img src="/veg-icon.png" className="h-4 w-4" alt="veg" />
+          <span className="text-green-600 font-bold">{item.qty}×</span>
+          <p className="text-gray-800">{item.name}</p>
+        </div>
+        <p className="font-medium text-gray-700">₹{item.price * item.qty}</p>
+      </div>
+    ))}
+  </div>
+
+  {/* Suggestion Box */}
+  <div>
+    <textarea
+      className="w-full rounded-lg p-3 text-sm bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-green-500 outline-none"
+      placeholder="Any suggestions? (e.g. Less spicy, no onion)"
+      rows={2}
+    />
+  </div>
+
+  {/* Bill Details */}
+  <div className="border-t pt-4 space-y-2 text-sm">
+    <h1 className="text-gray-800 font-semibold">Bill Details</h1>
+
+    <div className="flex justify-between">
+      <p>Subtotal</p>
+      <p>₹{subTotal}</p>
+    </div>
+    <div className="flex justify-between">
+      <p>Delivery Fee</p>
+      <p className={deliveryFee === 0 ? "text-green-600 font-semibold" : ""}>
+        {deliveryFee === 0 ? "FREE" : `₹${deliveryFee}`}
+      </p>
+    </div>
+    <div className="flex justify-between">
+      <p>Tax (5%)</p>
+      <p>₹{tax}</p>
+    </div>
+
+    <hr />
+
+    <div className="flex justify-between font-bold text-lg">
+      <p>Total</p>
+      <p>₹{grandTotal}</p>
+    </div>
+  </div>
+
+  {/* Sticky Place Order Button */}
+  <div className="sticky bottom-0 pt-3">
+    <button
+      onClick={placeOrder}
+      className="w-full bg-green-600 text-white py-3 rounded-lg hover:bg-green-700 font-semibold text-base shadow-md"
+    >
+      Place Order
+    </button>
+  </div>
+</div>
+
   );
 };
 

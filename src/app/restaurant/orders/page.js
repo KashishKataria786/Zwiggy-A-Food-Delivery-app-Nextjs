@@ -33,7 +33,7 @@ const OrdersPage = () => {
       let response = await fetch(url);
       response = await response.json();
 
-      if (!response.success) {
+      if (!response) {
         toast.error(response.message || "No Orders Found");
         setLoading(false);
         return;
@@ -81,10 +81,26 @@ const OrdersPage = () => {
             </select>
           </div>
 
-          {loading && <LoadingSpinner size={50} />}
+          {loading && <LoadingSpinner size={80} />}
 
           {!loading && orderData.length === 0 ? (
-            <p className="text-gray-600">No orders available</p>
+            <p className="text-gray-600">No <span
+                      className={`px-2 py-1 rounded text-xs font-semibold ${
+                        filter === "delivered"
+                          ? "bg-green-300 text-green-600"
+                          : filter === "confirmed"
+                          ? "bg-blue-300 text-blue-600"
+                          : filter === "pending"
+                          ? "bg-yellow-300 text-yellow-600"
+                          : filter === "cancelled"
+                          ? "bg-red-300 text-red-600"
+                          : filter === "preparing"
+                          ? "bg-orange-300 text-orange-600"
+                          : "bg-gray-300 text-red-700"
+                      }`}
+                    >
+                      {filter || "Unknown"}
+                    </span> orders available</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {orderData.map((order, index) => (
@@ -158,7 +174,7 @@ const OrdersPage = () => {
       </DashboardLayout>
       <SideModal isOpen={open} onClose={() => setOpen(false)}>
         <h1 className="my-3 text-3xl ">Order Details </h1>
-        <ParticularOrderComp data={particularOrderData} />
+        <ParticularOrderComp data={particularOrderData}  onOrderUpdated={loadAllOrder} onClose={()=>setOpen(false)}  />
       </SideModal>
     </>
   );
